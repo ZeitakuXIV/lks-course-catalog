@@ -22,8 +22,8 @@ phases:
     commands:
       - echo "Run unit testing and build docker image" 
       - npm run test
-      - docker build -t ${ECR_REPO):latest .
-      - docker tag ${ECR_REPO):latest $ECR_REPO${CODEBUILD_BUILD_NUMBER}
+      - docker build -t ${ECR_REPO}:latest .
+      - docker tag ${ECR_REPO}:latest $ECR_REPO${CODEBUILD_BUILD_NUMBER}
       - echo "Build image complete.."
   post_build: # In this phase you must push the image to ECR and create an image definition 
     commands: # Run your post-build script here
