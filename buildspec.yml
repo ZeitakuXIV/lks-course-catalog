@@ -21,7 +21,7 @@ phases:
   build: # In This phase you must Run Unit testing and Build an image from Dockerfile
     commands:
       - echo "Run unit testing and build docker image" 
-      - npm run test
+      - npm run testdev
       - docker build -t ${ECR_REPO):latest .
       - docker tag ${ECR_REPO):latest $ECR_REPO${CODEBUILD_BUILD_NUMBER}
       - echo "Build image complete.."
