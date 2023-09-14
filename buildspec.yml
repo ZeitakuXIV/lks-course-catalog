@@ -2,7 +2,7 @@ version: 0.2
 #
 env: # Create the environment
  variables:
-   ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com/course
+   ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com
    ECR_REGION: us-east-1 
    CONTAINER_NAME: course
    IMAGE_TAG: latest
@@ -29,17 +29,17 @@ phases:
    commands: # Run your post-build script here
     - echo "push the image to ECR.."
     - docker push ${ECR_REPO):latest
-    - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
+    - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBERD
     - printf '[{"name":"%s","imageUrl":"%s"}]'$CONTAINER_NAME ${ECR_REPO}:latest > imagedefinitions.json
     - echo "build complete..."
 
 reports: # Report file
  test-report:
   files:
-   -report/test-result.xml'
+   - 'report/test-result.xml'
   file-format: JUNITXML
 
 artifacts: # Output artifact will generate build
  files:
-   -imagedefinitions.json
+   - imagedefinitions.json
 
