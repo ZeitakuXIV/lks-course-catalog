@@ -29,7 +29,7 @@ phases:
    commands: # Run your post-build script here
     - echo "push the image to ECR.."
     - docker push ${ECR_REPO):latest
-    - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBERD
+    - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
     - printf '[{"name":"%s","imageUrl":"%s"}]'$CONTAINER_NAME ${ECR_REPO}:latest > imagedefinitions.json
     - echo "build complete..."
 
