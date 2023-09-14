@@ -84,6 +84,7 @@ courseRoute(app);
 
 app.listen(port, () => {
    console.log(`Server API listen on port ${port}`);
+   console.log(process.env.DB_HOST);
 });
 
 module.exports = app;
