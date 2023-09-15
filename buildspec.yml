@@ -2,7 +2,7 @@ version: 0.2
 #
 env: # Create the environment
   variables:
-    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com
+    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com/course
     ECR_REGION: us-east-1 
     CONTAINER_NAME: course
     IMAGE_TAG: latest
