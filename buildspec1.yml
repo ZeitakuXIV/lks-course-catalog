@@ -1,0 +1,45 @@
+version: 0.2
+#
+env: # Create the environment
+  variables:
+    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com/course
+    ECR_REGION: us-east-1 
+    CONTAINER_NAME: course
+    IMAGE_TAG: latest
+
+phases:
+  install: # Install runtime
+    runtime-versions:
+      nodejs: 18
+      docker: latest
+  pre_build: # You must use this phase for installing dependencies and login into ECR
+    commands: # Run your pre-build script here
+      - echo "Install Dependencies and login into ECR" 
+      - npm install
+      - echo "Logging into ECR.."
+      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+  build: # In This phase you must Run Unit testing and Build an image from Dockerfile
+    commands:
+      - echo "Run unit testing and build docker image" 
+      - npm run test
+      - docker build -t ${ECR_REPO}:latest .
+      - docker tag ${ECR_REPO}:latest ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
+      - echo "Build image complete.."
+  post_build: # In this phase you must push the image to ECR and create an image definition 
+    commands: # Run your post-build script here
+      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+      - echo "push the image to ECR.."
+      - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
+      - printf '[{"name":"%s","imageUrl":"%s"}]' ${CONTAINER_NAME} ${ECR_REPO}:latest > imagedefinitions.json
+      - echo "build complete..."
+
+reports: # Report file
+  test-report:
+    files:
+      - 'report/test-result.xml'
+    file-format: JUNITXML
+
+artifacts: # Output artifact will generate build
+  files:
+    - imagedefinitions.json
+

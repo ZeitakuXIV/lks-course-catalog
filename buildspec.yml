@@ -2,9 +2,9 @@ version: 0.2
 #
 env: # Create the environment
   variables:
-    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com/course
+    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com/catalog
     ECR_REGION: us-east-1 
-    CONTAINER_NAME: course
+    CONTAINER_NAME: catalog
     IMAGE_TAG: latest
 
 phases:
@@ -14,17 +14,16 @@ phases:
       docker: latest
   pre_build: # You must use this phase for installing dependencies and login into ECR
     commands: # Run your pre-build script here
-      - echo "Install Dependencies and login into ECR" 
+      - echo "Install Dependencies and login into ECR"
       - npm install
       - echo "Logging into ECR.."
       - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
   build: # In This phase you must Run Unit testing and Build an image from Dockerfile
     commands:
-      - echo "Run unit testing and build docker image" 
+      - echo "Run unit testing and build docker image"
       - npm run test
       - docker build -t ${ECR_REPO}:latest .
-      - docker tag ${ECR_REPO}:latest ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
-      - echo "Build image complete.."
+      - docker tag ${ECR_REPO}:latest ${ECR_REPO}:V${CODEBUILD_BUILD_NUMBER}
   post_build: # In this phase you must push the image to ECR and create an image definition 
     commands: # Run your post-build script here
       - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
@@ -42,4 +41,3 @@ reports: # Report file
 artifacts: # Output artifact will generate build
   files:
     - imagedefinitions.json
-
