@@ -2,10 +2,11 @@ version: 0.2
 #
 env: # Create the environment
   variables:
-    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com/catalog
+    ECR_REPO: 685254833852.dkr.ecr.us-east-1.amazonaws.com
     ECR_REGION: us-east-1 
     CONTAINER_NAME: catalog
     IMAGE_TAG: latest
+    REPO_NAME: catalog
 
 phases:
   install: # Install runtime
@@ -17,7 +18,7 @@ phases:
       - echo "Install Dependencies and login into ECR"
       - npm install
       - echo "Logging into ECR.."
-      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}/${REPO_NAME}
   build: # In This phase you must Run Unit testing and Build an image from Dockerfile
     commands:
       - echo "Run unit testing and build docker image"
@@ -27,7 +28,7 @@ phases:
       - echo "Build image complete.."
   post_build: # In this phase you must push the image to ECR and create an image definition 
     commands: # Run your post-build script here
-      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}/${REPO_NAME}
       - echo "push the image to ECR.."
       - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
       - printf '[{"name":"%s","imageUrl":"%s"}]' ${CONTAINER_NAME} ${ECR_REPO}:latest > imagedefinitions.json
