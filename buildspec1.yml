@@ -11,6 +11,7 @@ phases:
   install: # Install runtime
     runtime-versions:
       nodejs: 18
+      docker: latest
   pre_build: # You must use this phase for installing dependencies and login into ECR
     commands: # Run your pre-build script here
       - echo "Install Dependencies and login into ECR" 
