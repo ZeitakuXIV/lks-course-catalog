@@ -29,6 +29,7 @@ phases:
   post_build: # In this phase you must push the image to ECR and create an image definition 
     commands: # Run your post-build script here
       - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+      - docker push ${ECR_REPO}/${REPO_NAME}:latest
       - docker push ${ECR_REPO}/${REPO_NAME}:v${CODEBUILD_BUILD_NUMBER}
       - printf '[{"name":"%s","imageUrl":"%s"}]' ${CONTAINER_NAME} ${ECR_REPO}/${REPO_NAME}:latest > imagedefinitions.json
       - echo "build complete..."
