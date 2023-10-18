@@ -1,8 +1,8 @@
 {
     "AWSEBDockerrunVersion": "1",
     "Authentication": {
-    "Bucket": "elasticbeanstalk-us-east-1-685254833852", 
-    "Key": "config.json"
+    "Bucket": "beanstalk-cred", 
+    "Key": "catalog-cred/config.json"
     },
     "Image": {
         "Name": "685254833852.dkr.ecr.us-east-1.amazonaws.com/catalog"
@@ -11,7 +11,7 @@
     "Ports": [
         {
             "ContainerPort": 8000,
-            "HostPort": 80
+            "HostPort": 8080
         }
     ]
 }
